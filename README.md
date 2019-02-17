@@ -60,6 +60,7 @@ This project involves the design of a small imperative programming language cont
 The language should support the full range of expression involving the operations shown below. Note that this syntax will need to include parenthesis.
 - Types:  Boolean and Integer
 - Operations:
+
   | Description    | Operator | Signature                                 |
   |----------------|----------|-------------------------------------------|
   | conjunction    | and      | boolean ∗ boolean → boolean               |
