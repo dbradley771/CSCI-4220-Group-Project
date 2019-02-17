@@ -79,7 +79,7 @@ The language should support the full range of expression involving the operation
   | integer divide | div      | integer ∗ integer → integer               |
   | modulus        | mod      | integer ∗ integer → integer               |
   | exponent       | ^        | integer ∗ integer → integer               |
-  | abs            | ||       | integer → integer                         |
+  | abs            | \|\|     | integer → integer                         |
   | less-than      | <        | integer ∗ integer → integer               |
   | greater-than   | >        | integer ∗ integer → integer               |
   | equal-to       | =        | any ∗ any → boolean                       |
