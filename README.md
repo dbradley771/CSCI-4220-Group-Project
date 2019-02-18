@@ -46,7 +46,8 @@ This project involves the design of a small imperative programming language cont
 
 ## Statements
 - Declaration statements
-- Assignment statements–Conditional statements
+- Assignment statements
+- Conditional statements
   - if-then-else statements must be supported
   - if-then statements must be supported (be careful of the dangling else problem).
 - Pre/post increment/decrement statements (e.g., + +x;x−−; etc.)
