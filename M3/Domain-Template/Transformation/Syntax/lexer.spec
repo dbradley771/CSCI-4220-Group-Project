@@ -29,10 +29,14 @@ fun generateSchemaTokenName( yytext ) =
 (* ============================================================================================== *)
 %%
 %header (functor Target_LexFn(val getNextTokenPos : string -> {line: word, column: word}));
+digit        = [0-9];
+posDigit     = [1-9];
+integer      = 0 | {posDigit}{digit}*;
 
 alpha        = [A-Za-z];
-digit        = [0-9];
 alphanumeric = [A-Za-z0-9_];
+identifier   = {alpha}{alphanumeric}*;
+
 ws           = [\  \t \n];
 
 schema_id    = "<" {alpha}{alphanumeric}* ">_" {alphanumeric}+;
@@ -42,8 +46,43 @@ comment      = "//" .* ;
 {ws}+        => ( getNextTokenPos(yytext); lex()  );
 {comment}    => ( getNextTokenPos(yytext); lex()  );
 
-{digit}+                      => ( SHELL("integer"   , yytext,     getNextTokenPos(yytext))    );
-{alpha}{alphanumeric}*        => ( SHELL("id"        , yytext,     getNextTokenPos(yytext))    );
+";"                 => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"int"               => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"bool"              => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"="                 => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"print"             => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"("                 => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+")"                 => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"if"                => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"then"              => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"else"              => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"for"               => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"while"             => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"{"                 => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"}"                 => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"true"              => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"false"             => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"++"                => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"--"                => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"or"                => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"and"               => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"=="                => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"!="                => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"<"                 => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"<="                => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+">"                 => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+">="                => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"+"                 => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"-"                 => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"*"                 => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"div"               => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"mod"               => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"^"                 => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"|"                 => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+"not"               => ( SHELL(yytext        , yytext,     getNextTokenPos(yytext))    );
+
+{integer}           => ( SHELL("integer"     , yytext,     getNextTokenPos(yytext))    );
+{identifier}        => ( SHELL("identifier"  , yytext,     getNextTokenPos(yytext))    );
 
 
 
