@@ -1,0 +1,22 @@
+
+
+// ===========================================================================
+module BasicView(precision = 0, verbosity=0)
+// ===========================================================================
+
+// ===========================================================================
+strategy main:   
+    // this code requires the start symbol of your grammar to be: prog
+    <prog>_in 
+    -> 
+    <prog>_in
+    
+    if { 
+            sml.interpreter_execute(<prog>_in) // Here is where the call to the sml interpreter function is made.
+       }
+        
+// ===========================================================================
+end // Module
+// ===========================================================================
+
+

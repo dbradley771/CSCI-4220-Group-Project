@@ -1,0 +1,54 @@
+local
+    $(SML_LIB)/basis/basis.mlb
+    $(SML_LIB)/basis/sml-nj.mlb
+    $(SML_LIB)/smlnj-lib/Util/smlnj-lib.mlb
+
+    $(TL)/Utility/FileUtility.sml
+    
+    $(TL)/engineCommandLineSupportHandleException.mlb
+    
+    $(TL)/engineCoreSemantics.mlb
+    
+    $(TL)/engineCoreSyntaxAbstract.mlb
+    $(TL)/engineCoreSyntaxConcrete.mlb
+    
+    $(TL)/engineGeneralLibrariesEnvironment.mlb
+    
+    $(TL)/Engine/General_Libraries/Strategic_Values.sml
+    $(TL)/Engine/General_Libraries/Clocks.sml
+    $(TL)/Engine/General_Libraries/Ids.sml
+    
+    $(TL)/Engine/Engine_Core/Enhanced_PrettyPrinter/prettyprint_datatypes.sml
+    $(TL)/Engine/Engine_Core/Enhanced_PrettyPrinter/prettyprint_engine.sml
+    
+    $(TL)/Engine/General_Libraries/prettyprint_signature.sml
+    
+    $(DOMAIN)/Transformation/bin/format.sty.sml
+    
+    $(TL)/Engine/General_Libraries/Input_Output.sml
+    $(TL)/Engine/General_Libraries/PrettyPrint.sml
+    $(TL)/Engine/General_Libraries/Strategic_Views.sml
+in
+    ann
+        "nonexhaustiveMatch error"
+        "redundantMatch error"
+    in
+        Util/multi-map-sig.sml
+        Util/list-multi-map-fn.sml
+
+        Util/scoped-map-sig.sml
+        Util/scoped-map-fn.sml
+
+        Util/string-map.sml
+
+        Interface_Sig.sml
+        Util.sml
+        
+        Interpreter/model.sml
+        Interpreter/semantics.sml
+        Interpreter/typeChecker.sml
+        Interpreter/interpreter.sml
+    
+        UserDefined.sml
+    end
+end
