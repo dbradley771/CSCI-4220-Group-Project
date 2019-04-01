@@ -34,7 +34,7 @@ prog
 <loop>                  ::= <for_loop>
                           | <while_loop>                                            .
 
-<for_loop>              ::= "for" "(" <assign> ";" <expr> ";" <assign> ")" <block>  .
+<for_loop>              ::= "for" "(" <assignment> ";" <expr> ";" <assignment> ")" <block>  .
 
 <while_loop>            ::= "while" "(" <expr> ")" <block>                          .
 
