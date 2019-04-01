@@ -3,89 +3,90 @@ USE_LR_PARSER
 prog
 
 (* ======================================================================================================= *)
-<prog>                  ::= <stmt_list>                                             .
+
+<prog>                  ::= <stmt_list>                                                     .
 
 <stmt_list>             ::= <stmt> ";" <stmt_list>
-                          | <stmt> ";"                                              .
+                          | <stmt> ";"                                                      .
 
 <stmt>                  ::= <declaration>
                           | <assignment>
                           | <print_stmt>
                           | <conditional>
                           | <loop>
-                          | <block>                                                  .
+                          | <block>                                                         .
 
 <declaration>           ::= "int" identifier
-                          | "bool" identifier                                       .
+                          | "bool" identifier                                               .
 
 <assignment>            ::= <pre_post>
                           | "bool" identifier "=" <expr>
                           | "int" identifier "=" <expr>
-                          | identifier "=" <expr>                               .
+                          | identifier "=" <expr>                                           .
 
-<print_stmt>            ::= "print" "(" <expr> ")"                                  .
+<print_stmt>            ::= "print" "(" <expr> ")"                                          .
 
 <conditional>           ::= <if_stmt>
-                          | <if_else>                                               .
+                          | <if_else>                                                       .
 
-<if_stmt>               ::= "if" "(" <expr> ")" "then" <block>                      .
+<if_stmt>               ::= "if" "(" <expr> ")" "then" <block>                              .
 
-<if_else>               ::= "if" "(" <expr> ")" "then" <block> "else" <block>       .
+<if_else>               ::= "if" "(" <expr> ")" "then" <block> "else" <block>               .
 
 <loop>                  ::= <for_loop>
-                          | <while_loop>                                            .
+                          | <while_loop>                                                    .
 
 <for_loop>              ::= "for" "(" <assignment> ";" <expr> ";" <assignment> ")" <block>  .
 
-<while_loop>            ::= "while" "(" <expr> ")" <block>                          .
+<while_loop>            ::= "while" "(" <expr> ")" <block>                                  .
 
-<block>                 ::= "{" <stmt_list> "}"                                     .
+<block>                 ::= "{" <stmt_list> "}"                                             .
 
 <value>                 ::= integer
                           | "true"
-                          | "false"                                                 .
+                          | "false"                                                         .
 
 <pre_post>              ::= "++" identifier
                           | "--" identifier
                           | identifier "++"
-                          | identifier "--"                                         .
+                          | identifier "--"                                                 .
 
-<expr>                  ::= <logic_or>                                              .
+<expr>                  ::= <logic_or>                                                      .
 
 <logic_or>              ::= <logic_or> "or" <logic_and>
-                          | <logic_and>                                             .
+                          | <logic_and>                                                     .
 
 <logic_and>             ::= <logic_and> "and" <equality>
-                          | <equality>                                              .
+                          | <equality>                                                      .
 
 <equality>              ::= <equality> "==" <inequality>
                           | <equality> "!=" <inequality>
-                          | <inequality>                                            .
+                          | <inequality>                                                    .
 
 <inequality>            ::= <additive> "<" <additive>
                           | <additive> "<=" <additive>
                           | <additive> ">" <additive>
                           | <additive> ">=" <additive>
-                          | <additive>                                              .
+                          | <additive>                                                      .
 
 <additive>              ::= <additive> "+" <multiplicative>
                           | <additive> "-" <multiplicative>
-                          | <multiplicative>                                        .
+                          | <multiplicative>                                                .
 
 <multiplicative>        ::= <multiplicative> "*" <unary_minus>
                           | <multiplicative> "div" <unary_minus>
                           | <multiplicative> "mod" <unary_minus>
-                          | <unary_minus>                                           .
+                          | <unary_minus>                                                   .
 
 <unary_minus>           ::= "-" <unary_minus>
-                          | <exponent>                                              .
+                          | <exponent>                                                      .
 
 <exponent>              ::= <operations> "^" <exponent>
-                          | <operations>                                            .
+                          | <operations>                                                    .
 
 <operations>            ::= identifier
                           | "(" <expr> ")"
                           | "|" <expr> "|"
                           | <pre_post>
                           | "not" "(" <expr> ")"
-                          | <value>                                                 .
+                          | <value>                                                         .
