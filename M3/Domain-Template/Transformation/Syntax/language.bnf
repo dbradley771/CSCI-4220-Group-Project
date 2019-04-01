@@ -12,7 +12,8 @@ prog
                           | <assignment>
                           | <print_stmt>
                           | <conditional>
-                          | <loop>                                                  .
+                          | <loop>
+                          | <block>                                                  .
 
 <declaration>           ::= "int" identifier
                           | "bool" identifier                                       .
@@ -20,7 +21,7 @@ prog
 <assignment>            ::= <pre_post>
                           | "bool" identifier "=" <expr>
                           | "int" identifier "=" <expr>
-                          | identifier "=" <expr> ";"                               .
+                          | identifier "=" <expr>                               .
 
 <print_stmt>            ::= "print" "(" <expr> ")"                                  .
 
