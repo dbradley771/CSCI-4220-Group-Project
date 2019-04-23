@@ -48,7 +48,6 @@ fun accessEnv ( id1, (env,_,s) ) =
           aux env
        end;
  
-(* fun accessStore *)
 fun accessStore ( loc1, (env,_,s) ) = 
        let
           val msg = "Error: accessStore " ^ Int.toString(loc1) ^ " not found.";
@@ -86,10 +85,9 @@ fun updateStore ( loc1, v1, (env,n,s1) ) =
           ( env, n, aux s1 )
         end;
                 
- 
-(* fun getLoc *)
- 
-(* fun getType *)
+fun getLoc ( t, loc ) = loc;
+
+fun getType ( t, loc) = t;
 
 
 (* The model defined here is a triple consisting of an environment, an address counter, and a store. The environment
@@ -104,7 +102,7 @@ end; (* struct *)
 (* =========================================================================================================== *)
 
 (* Tests *)
-open Model;
+(* open Model; *)
 
 (* (accessEnv("x", ([("x", INT, 0)], 1, [])); *)
 (* accessEnv("x", initialModel); *)
@@ -117,11 +115,10 @@ accessStore(0, ([("x", INT, 0)], 1, [])); *)
 val m1 = updateEnv("x", INT, newLoc, initialModel);
 val (_,newLoc,_) = m1
 val m2 = updateEnv("y", BOOL, newLoc, m1);
-val m3 = updateEnv("x", BOOL, 3, m2); *)
 
-(* val m1 = updateStore(0, Integer 5, initialModel);
-val m2 = updateStore(1, Boolean true, m1);
-val m3 = updateStore(0, Integer 7, m2); *)
+val loc = getLoc(accessEnv("x", m2));
+val m3 = updateStore(loc, Integer 5, m2);
+val m4 = accessStore(loc, m3); *)
 
 
 
