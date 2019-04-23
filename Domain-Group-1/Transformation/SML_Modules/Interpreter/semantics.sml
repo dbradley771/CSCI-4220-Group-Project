@@ -69,8 +69,56 @@ fun M(  itree(inode("prog",_),
                 ] 
              ), 
         m
-    ) = m
-        
+    ) = M( stmt_list, m )
+    
+  (* Statement List *)
+  | M( itree(inode("stmt_list",_),
+                [
+                    stmt,
+                    itree(inode(";",_), [] ),
+                    stmt_list
+                ]
+            ),
+        m0
+    ) = let
+          val m1 = M(stmt, m0)
+          val m2 = M(stmt_list, m0)
+        in
+          m2
+        end
+
+  | M( itree(inode("stmt_list",_),
+                [
+                    stmt,
+                    itree(inode(";",_), [] )
+                ]
+            ),
+        m
+    ) = M( stmt, m )
+   
+  (* Statement *)
+  | M( itree(inode("stmt",_),
+                [
+                    declaration
+                ]
+            ),
+        m
+    ) = M( declaration, m)
+  
+  (* Declaration *)
+  | M( itree(inode("declaration",_),
+                [
+                    itree(inode("int",_), [] ),
+                    id_node
+                ]
+            ),
+        (env, n, s)
+    ) = let
+          val id = getLeaf(id_node)
+        in
+            updateEnv(id, INT, n, (env, n, s))
+        end
+    
   | M(  itree(inode(x_root,_), children),_) = raise General.Fail("\n\nIn M root = " ^ x_root ^ "\n\n")
   
   | M _ = raise Fail("error in Semantics.M - this should never occur")

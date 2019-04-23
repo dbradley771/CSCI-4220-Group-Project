@@ -12,7 +12,7 @@ struct
    Consult (i.e., open Int and open Bool) the SML structures Int and Bool for functions that can help with 
    this translation. 
 *)
-(* fun getLeaf( term ) = CONCRETE.leavesToStringRaw term *)
+fun getLeaf( term ) = CONCRETE.leavesToStringRaw term
 
 fun error msg = ( print msg; raise runtime_error );
 
@@ -144,7 +144,7 @@ end; (* struct *)
 (* =========================================================================================================== *)
 
 (* Tests *)
-open Model;
+(* open Model; *)
 
 (* (accessEnv("x", ([("x", INT, 0)], 1, [])); *)
 (* accessEnv("x", initialModel); *)
@@ -153,7 +153,7 @@ open Model;
 accessStore(2, ([("x", BOOL, 0),("y", INT, 1),("z", BOOL, 2)], 3, [(0, Boolean true),(1, Integer 3),(2, Boolean false)]));
 accessStore(0, ([("x", INT, 0)], 1, [])); *)
 
-val (_,newLoc,_) = initialModel
+(* val (_,newLoc,_) = initialModel
 val m1 = updateEnv("x", INT, newLoc, initialModel);
 val (_,newLoc,_) = m1
 val m2 = updateEnv("y", BOOL, newLoc, m1);
@@ -162,7 +162,7 @@ val loc = getLoc(accessEnv("x", m2));
 val m3 = updateStore(loc, Integer 5, m2);
 val m4 = accessStore(loc, m3);
 
-showProgState m3;
+showProgState m3; *)
 
 
 
