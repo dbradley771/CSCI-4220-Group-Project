@@ -61,34 +61,29 @@ fun accessStore ( loc1, (env,_,s) ) =
           aux s
        end;
 
-fun updateEnv ( loc1, v1, (env,n1,s1) ) =
+fun updateEnv ( id1, t1, loc1, (env1,n1,s) ) =
         let
-          fun aux [] = ( env, n1+1,[(loc1, v1)] )
-            | aux ((loc,v)::s2) =
-                if loc1 = loc then ( env, n1, (loc1, v1)::s2)
+          fun aux [] = ( [(id1, t1, loc1)], n1+1,s )
+            | aux ((id,t,loc)::env2) =
+                if id1 = id then ( (id1, t1, loc1)::env2, n1, s)
                 else
                     let
-                      val (_,n2,s3) = aux s2
+                      val (env3,n2,_) = aux env2
                     in
-                      ( env, n2, (loc,v)::s3 )
+                      ( (id,t,loc)::env3, n2, s )
                     end
         in
-          aux s1
+          aux env1
         end;
  
-fun updateStore ( loc1, v1, (env,n1,s1) ) =
+fun updateStore ( loc1, v1, (env,n,s1) ) =
         let
-          fun aux [] = ( env, n1+1,[(loc1, v1)] )
+          fun aux [] = [(loc1, v1)]
             | aux ((loc,v)::s2) =
-                if loc1 = loc then ( env, n1, (loc1, v1)::s2)
-                else
-                    let
-                      val (_,n2,s3) = aux s2
-                    in
-                      ( env, n2, (loc,v)::s3 )
-                    end
+                if loc1 = loc then (loc1, v1)::s2
+                else (loc,v)::aux s2
         in
-          aux s1
+          ( env, n, aux s1 )
         end;
                 
  
@@ -117,6 +112,12 @@ open Model;
 (* accessStore(0, ([("x", INT, 0)], 1, [(0, Integer 8)]) );
 accessStore(2, ([("x", BOOL, 0),("y", INT, 1),("z", BOOL, 2)], 3, [(0, Boolean true),(1, Integer 3),(2, Boolean false)]));
 accessStore(0, ([("x", INT, 0)], 1, [])); *)
+
+(* val (_,newLoc,_) = initialModel
+val m1 = updateEnv("x", INT, newLoc, initialModel);
+val (_,newLoc,_) = m1
+val m2 = updateEnv("y", BOOL, newLoc, m1);
+val m3 = updateEnv("x", BOOL, 3, m2); *)
 
 (* val m1 = updateStore(0, Integer 5, initialModel);
 val m2 = updateStore(1, Boolean true, m1);
