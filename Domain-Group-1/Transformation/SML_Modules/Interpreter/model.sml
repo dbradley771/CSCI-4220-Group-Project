@@ -1,3 +1,5 @@
+exception runtime_error;
+
 (* =========================================================================================================== *)
 structure Model =
 
@@ -10,7 +12,10 @@ struct
    Consult (i.e., open Int and open Bool) the SML structures Int and Bool for functions that can help with 
    this translation. 
 *)
-fun getLeaf( term ) = CONCRETE.leavesToStringRaw term 
+(* fun getLeaf( term ) = CONCRETE.leavesToStringRaw term *)
+
+fun error msg = ( print msg; raise runtime_error );
+
 
 
 (* For your typeChecker you may want to have a datatype that defines the types 
@@ -31,7 +36,7 @@ type store = (loc * denotable_value) list
 
 
 (* Functions used to interact with the model *)
-fun accessEnv ( id1, (env,_,s) ) = 
+(* fun accessEnv ( id1, (env,_,s) ) = 
        let
           val msg = "Error: accessEnv " ^ id1 ^ " not found.";
 
@@ -41,10 +46,21 @@ fun accessEnv ( id1, (env,_,s) ) =
                      else aux env;
        in
           aux env
-       end;
+       end; *)
  
 (* fun accessStore *)
- 
+fun accessStore ( loc1, (env,_,s) ) = 
+       let
+          val msg = "Error: accessStore " ^ Int.toString(loc1) ^ " not found.";
+
+          fun aux [] = error msg
+            | aux ((loc,v)::s) = 
+                     if loc1 = loc then v
+                     else aux s;
+       in
+          aux s
+       end;
+
 (* fun updateEnv *)
  
 (* fun updateStore *)
@@ -61,16 +77,19 @@ fun accessEnv ( id1, (env,_,s) ) =
    incremented. *)
 val initialModel = ( []:env, 0:loc, []:store )
 
-accessEnv("x", initialModel);
-
 (* =========================================================================================================== *)
 end; (* struct *) 
 (* =========================================================================================================== *)
 
+(* Tests *)
+open Model;
 
+(* (accessEnv("x", ([("x", INT, 0)], 1, [])); *)
+(* accessEnv("x", initialModel); *)
 
-
-
+(* accessStore(0, ([("x", INT, 0)], 1, [(0, Integer 8)]) );
+accessStore(2, ([("x", BOOL, 0),("y", INT, 1),("z", BOOL, 2)], 3, [(0, Boolean true),(1, Integer 3),(2, Boolean false)]));
+accessStore(0, ([("x", INT, 0)], 1, [])); *)
 
 
 
