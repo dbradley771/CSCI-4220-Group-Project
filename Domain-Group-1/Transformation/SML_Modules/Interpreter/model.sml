@@ -30,12 +30,38 @@ type env   = (string * types * loc) list
 type store = (loc * denotable_value) list
 
 
+(* Functions used to interact with the model *)
+fun accessEnv ( id1, (env,_,s) ) = 
+       let
+          val msg = "Error: accessEnv " ^ id1 ^ " not found.";
+
+          fun aux [] = error msg
+            | aux ((id,t,loc)::env) = 
+                     if id1 = id then (t,loc)
+                     else aux env;
+       in
+          aux env
+       end;
+ 
+(* fun accessStore *)
+ 
+(* fun updateEnv *)
+ 
+(* fun updateStore *)
+ 
+(* fun getLoc *)
+ 
+(* fun getType *)
+
+
 (* The model defined here is a triple consisting of an environment, an address counter, and a store. The environment
    and the store are lists similar to what we have used in class. The address counter serves as an implementation of
    new(). Note that, depending on your implementation, this counter either contains the address of (1) the
    next available memory location, or (2) the last used memory location -- it all depends on when the counter is 
    incremented. *)
 val initialModel = ( []:env, 0:loc, []:store )
+
+accessEnv("x", initialModel);
 
 (* =========================================================================================================== *)
 end; (* struct *) 
