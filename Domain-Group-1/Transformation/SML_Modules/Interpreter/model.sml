@@ -90,6 +90,48 @@ fun getLoc ( t, loc ) = loc;
 fun getType ( t, loc) = t;
 
 
+(* Funcitons to inspect program state *)
+fun typeToString BOOL  = "bool"
+  | typeToString INT   = "integer"
+  | typeToString ERROR = "error";
+
+fun envEntryToString (id,t,loc) = 
+       "(" ^ id ^ "," ^ typeToString t ^ "," ^ Int.toString loc ^ ")"; 
+
+fun showEnv [] = print "\n"
+  | showEnv (entry::env) = ( 
+                             print("\n" ^ envEntryToString entry);
+                             showEnv env
+                           );
+fun varToString (Boolean(x)) = Bool.toString x
+  | varToString (Integer(x)) = Int.toString x;
+
+fun storeEntryToString (loc, v) = 
+       "(" ^ Int.toString loc ^ "," ^ varToString v ^ ")"; 
+
+fun showStore [] = print "\n"
+  | showStore (entry::store) = ( 
+                             print("\n" ^ storeEntryToString entry);
+                             showStore store
+                           );
+
+fun showProgState (env,n,s) =   
+    (
+    print("\n====================================\n");
+    print("ENVIRONMENT");
+    showEnv env;
+    
+    print("\n");
+    print("COUNTER\n");
+    print(Int.toString n ^ "\n");
+    
+    print("\n");
+    print("STORE");
+    showStore s;
+    print("====================================\n")
+ );
+
+
 (* The model defined here is a triple consisting of an environment, an address counter, and a store. The environment
    and the store are lists similar to what we have used in class. The address counter serves as an implementation of
    new(). Note that, depending on your implementation, this counter either contains the address of (1) the
@@ -102,7 +144,7 @@ end; (* struct *)
 (* =========================================================================================================== *)
 
 (* Tests *)
-(* open Model; *)
+open Model;
 
 (* (accessEnv("x", ([("x", INT, 0)], 1, [])); *)
 (* accessEnv("x", initialModel); *)
@@ -111,16 +153,16 @@ end; (* struct *)
 accessStore(2, ([("x", BOOL, 0),("y", INT, 1),("z", BOOL, 2)], 3, [(0, Boolean true),(1, Integer 3),(2, Boolean false)]));
 accessStore(0, ([("x", INT, 0)], 1, [])); *)
 
-(* val (_,newLoc,_) = initialModel
+val (_,newLoc,_) = initialModel
 val m1 = updateEnv("x", INT, newLoc, initialModel);
 val (_,newLoc,_) = m1
 val m2 = updateEnv("y", BOOL, newLoc, m1);
 
 val loc = getLoc(accessEnv("x", m2));
 val m3 = updateStore(loc, Integer 5, m2);
-val m4 = accessStore(loc, m3); *)
+val m4 = accessStore(loc, m3);
 
-
+showProgState m3;
 
 
 
