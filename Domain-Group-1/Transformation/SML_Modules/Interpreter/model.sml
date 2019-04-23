@@ -36,7 +36,7 @@ type store = (loc * denotable_value) list
 
 
 (* Functions used to interact with the model *)
-(* fun accessEnv ( id1, (env,_,s) ) = 
+fun accessEnv ( id1, (env,_,s) ) = 
        let
           val msg = "Error: accessEnv " ^ id1 ^ " not found.";
 
@@ -46,7 +46,7 @@ type store = (loc * denotable_value) list
                      else aux env;
        in
           aux env
-       end; *)
+       end;
  
 (* fun accessStore *)
 fun accessStore ( loc1, (env,_,s) ) = 
@@ -61,9 +61,36 @@ fun accessStore ( loc1, (env,_,s) ) =
           aux s
        end;
 
-(* fun updateEnv *)
+fun updateEnv ( loc1, v1, (env,n1,s1) ) =
+        let
+          fun aux [] = ( env, n1+1,[(loc1, v1)] )
+            | aux ((loc,v)::s2) =
+                if loc1 = loc then ( env, n1, (loc1, v1)::s2)
+                else
+                    let
+                      val (_,n2,s3) = aux s2
+                    in
+                      ( env, n2, (loc,v)::s3 )
+                    end
+        in
+          aux s1
+        end;
  
-(* fun updateStore *)
+fun updateStore ( loc1, v1, (env,n1,s1) ) =
+        let
+          fun aux [] = ( env, n1+1,[(loc1, v1)] )
+            | aux ((loc,v)::s2) =
+                if loc1 = loc then ( env, n1, (loc1, v1)::s2)
+                else
+                    let
+                      val (_,n2,s3) = aux s2
+                    in
+                      ( env, n2, (loc,v)::s3 )
+                    end
+        in
+          aux s1
+        end;
+                
  
 (* fun getLoc *)
  
@@ -90,6 +117,10 @@ open Model;
 (* accessStore(0, ([("x", INT, 0)], 1, [(0, Integer 8)]) );
 accessStore(2, ([("x", BOOL, 0),("y", INT, 1),("z", BOOL, 2)], 3, [(0, Boolean true),(1, Integer 3),(2, Boolean false)]));
 accessStore(0, ([("x", INT, 0)], 1, [])); *)
+
+(* val m1 = updateStore(0, Integer 5, initialModel);
+val m2 = updateStore(1, Boolean true, m1);
+val m3 = updateStore(0, Integer 7, m2); *)
 
 
 
