@@ -90,7 +90,7 @@ fun getLoc ( t, loc ) = loc;
 fun getType ( t, loc) = t;
 
 
-(* Funcitons to inspect program state *)
+(* Functions to inspect program state *)
 fun typeToString BOOL  = "bool"
   | typeToString INT   = "integer"
   | typeToString ERROR = "error";
@@ -117,7 +117,7 @@ fun showStore [] = print "\n"
 
 fun showProgState (env,n,s) =   
     (
-    print("\n====================================\n");
+    print("\n========================================\n");
     print("ENVIRONMENT");
     showEnv env;
     
@@ -128,9 +128,15 @@ fun showProgState (env,n,s) =
     print("\n");
     print("STORE");
     showStore s;
-    print("====================================\n")
+    print("========================================\n")
  );
 
+(* Helper Functions *)
+fun toInt(Boolean(x)) = error "invalid type for int"
+  | toInt(Integer(x)) = x;
+
+fun toBool(Integer(x)) = error "invalid type for boolean"
+  | toBool(Boolean(x)) = x;
 
 (* The model defined here is a triple consisting of an environment, an address counter, and a store. The environment
    and the store are lists similar to what we have used in class. The address counter serves as an implementation of

@@ -1,1 +1,7 @@
-int x;
+int x = 3 * 6 + 4;
+bool y = false or true;
+int z = 0;
+y = false;
+x++;
+x = z;
+x = |-2|;
