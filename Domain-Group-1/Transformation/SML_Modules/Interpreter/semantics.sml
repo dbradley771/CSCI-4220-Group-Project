@@ -719,7 +719,6 @@ fun M(  itree(inode("prog",_),
   (* If *)
   | M( itree(inode("if_stmt", _),
                 [
-                    id_node,
                     itree(inode("if",_), [] ),
                     itree(inode("(",_), [] ),
                     expr,

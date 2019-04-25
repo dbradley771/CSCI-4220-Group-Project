@@ -117,7 +117,6 @@ fun showStore [] = print "\n"
 
 fun showProgState (env,n,s) =   
     (
-    print("\n========================================\n");
     print("ENVIRONMENT");
     showEnv env;
     
@@ -127,8 +126,7 @@ fun showProgState (env,n,s) =
     
     print("\n");
     print("STORE");
-    showStore s;
-    print("========================================\n")
+    showStore s
  );
 
 (* Helper Functions *)
