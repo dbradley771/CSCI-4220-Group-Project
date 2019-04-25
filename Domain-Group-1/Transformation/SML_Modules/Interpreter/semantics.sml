@@ -695,6 +695,81 @@ fun M(  itree(inode("prog",_),
   (* Conditional *)
   
   (* Loop *)
+  | M( itree(inode("loop",_),
+                [
+                    loop
+                ]
+            ),
+        m
+    ) = M(loop, m)
+  
+  (* For Loop *)
+  | M( itree(inode("for_loop",_),
+                [
+                    itree(inode("for",_), [] ),
+                    itree(inode("(",_), [] ),
+                    assignment1,
+                    itree(inode(";",_), [] ),
+                    expr,
+                    itree(inode(";",_), [] ),
+                    assignment2,
+                    itree(inode(")",_), [] ),
+                    block
+                ]
+            ),
+        m0
+    ) = let
+          val m1 = M(assignment1, m0)
+          
+          fun aux(m2) = 
+            let
+                val (v, m3) = E(expr, m2)
+            in
+                if toBool(v) then
+                    let
+                        val m4 = M(block, m3)
+                        val m5 = M(assignment1, m2)
+                        val m6 = aux(m5)
+                    in
+                        m6
+                    end
+                else m3
+            end
+            
+        in
+          aux(m1)
+        end
+
+  (* While Loop *)
+  | M( itree(inode("while_loop",_),
+                [
+                    itree(inode("while",_), [] ),
+                    itree(inode("(",_), [] ),
+                    expr,
+                    itree(inode(")",_), [] ),
+                    block
+                ]
+            ),
+        m0
+    ) = let
+    
+          fun aux(m1) = 
+            let
+                val (v, m2) = E(expr, m1)
+            in
+                if toBool(v) then
+                    let
+                        val m3 = M(block, m2)
+                        val m4 = aux(m3)
+                    in
+                        m4
+                    end
+                else m2
+            end
+            
+        in
+          aux(m0)
+        end
 
   | M(  itree(inode(x_root,_), children),_) = raise General.Fail("\n\nIn M root = " ^ x_root ^ "\n\n")
   
