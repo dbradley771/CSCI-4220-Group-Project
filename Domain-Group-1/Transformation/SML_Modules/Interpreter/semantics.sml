@@ -689,21 +689,25 @@ fun M(  itree(inode("prog",_),
         in
           m2
         end
-
-  | M( itree(inode("print", _),
+        
+  (* Print *)
+  | M( itree(inode("print_stmt", _),
                 [
-                    id_node,
                     itree(inode("print",_), []),
-                    expr
+                    itree(inode("(",_), [] ),
+                    expr,
+                    itree(inode(")",_), [] )
                 ]
             ),
             m0
      ) = let
             val (v, m1) = E(expr, m0)
+            val str = varToString(v)
          in
-            print(v1)
+            (print(str ^ "\n"); m1)
          end
-
+         
+  (* Conditional *)
   | M( itree(inode("conditional",_),
                    [
                        conditional
@@ -712,64 +716,63 @@ fun M(  itree(inode("prog",_),
            m
        ) = M(conditional, m)
 
-  | M( itree(inode("if", _),
+  (* If *)
+  | M( itree(inode("if_stmt", _),
                 [
                     id_node,
                     itree(inode("if",_), [] ),
-                    expr
+                    itree(inode("(",_), [] ),
+                    expr,
+                    itree(inode(")",_), [] ),
                     itree(inode("then",_), []),
-                    block1
+                    block
                 ]
              ),
-            m
+            m0
       ) = let
                val (v, m1) = E(expr, m0)
            in
-                if v then M( block1, m1)
+                if toBool(v) then M(block, m1)
                 else m1
            end
 
-  | M( itree(inode("if-else", _),
+  (* If Else *)
+  | M( itree(inode("if_else", _),
                   [
-                      id_node,
-                      itree(inode("if",_), [] ),
-                      expr
-                      itree(inode("then",_), []),
-                      block1
-                      itree(inode("else",_), []),
-                      block2
+                    itree(inode("if",_), [] ),
+                    itree(inode("(",_), [] ),
+                    expr,
+                    itree(inode(")",_), [] ),
+                    itree(inode("then",_), []),
+                    block1,
+                    itree(inode("else",_), []),
+                    block2
                   ]
                ),
-              m
+              m0
         ) = let
                  val (v, m1) = E(expr, m0)
              in
-                  if v then M( block1, m1)
+                  if toBool(v) then M( block1, m1)
                   else M(block2, m1)
              end
-
+  
+  (* Block *)
   | M( itree(inode("block", _),
                 [
-                    id_node,
                     itree(inode("{",_), []),
-                    stmtList
+                    stmtList,
                     itree(inode("}",_), [])
                 ]
             ),
-           (env0, n, s0)
+           (env0, n0, s0)
       ) = let
-            val (env1, n, s1) = M(stmtList, (env0, n, s0))
-            val m2 = (env0, n, s1)
+            val (_, n1, s1) = M(stmtList, (env0, n0, s0))
+            val m = (env0, n1, s1)
           in
-            m2
+            m
           end
-
-  | M( itree(inode( ""
-
-  (* Print *)
-  
-  (* Conditional *)
-  
+          
   (* Loop *)
   | M( itree(inode("loop",_),
                 [
@@ -804,7 +807,7 @@ fun M(  itree(inode("prog",_),
                 if toBool(v) then
                     let
                         val m4 = M(block, m3)
-                        val m5 = M(assignment1, m2)
+                        val m5 = M(assignment2, m4)
                         val m6 = aux(m5)
                     in
                         m6

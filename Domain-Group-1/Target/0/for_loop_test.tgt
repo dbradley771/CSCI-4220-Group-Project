@@ -1,0 +1,19 @@
+int sum = 0;
+int sum2 = 0;
+
+{
+    int x;
+
+    for(int i = 1; i < 32; i++) {
+        x = i;        
+        for(int j = 1; j < 3; j++) {
+            if(x mod 2 == 0) then {
+                x = x div 2;
+            }
+            else {
+                x = 3 * x + 1;
+            };
+        };
+        sum = sum + 3;
+    };
+};
