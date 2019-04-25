@@ -688,7 +688,83 @@ fun M(  itree(inode("prog",_),
           val m2 = updateStore(loc, v, m1)
         in
           m2
-        end 
+        end
+
+  | M( itree(inode("print", _),
+                [
+                    id_node,
+                    itree(inode("print",_), []),
+                    expr
+                ]
+            ),
+            m0
+     ) = let
+            val (v, m1) = E(expr, m0)
+         in
+            print(v1)
+         end
+
+  | M( itree(inode("conditional",_),
+                   [
+                       conditional
+                   ]
+               ),
+           m
+       ) = M(conditional, m)
+
+  | M( itree(inode("if", _),
+                [
+                    id_node,
+                    itree(inode("if",_), [] ),
+                    expr
+                    itree(inode("then",_), []),
+                    block1
+                ]
+             ),
+            m
+      ) = let
+               val (v, m1) = E(expr, m0)
+           in
+                if v then M( block1, m1)
+                else m1
+           end
+
+  | M( itree(inode("if-else", _),
+                  [
+                      id_node,
+                      itree(inode("if",_), [] ),
+                      expr
+                      itree(inode("then",_), []),
+                      block1
+                      itree(inode("else",_), []),
+                      block2
+                  ]
+               ),
+              m
+        ) = let
+                 val (v, m1) = E(expr, m0)
+             in
+                  if v then M( block1, m1)
+                  else M(block2, m1)
+             end
+
+  | M( itree(inode("block", _),
+                [
+                    id_node,
+                    itree(inode("{",_), []),
+                    stmtList
+                    itree(inode("}",_), [])
+                ]
+            ),
+           (env0, n, s0)
+      ) = let
+            val (env1, n, s1) = M(stmtList, (env0, n, s0))
+            val m2 = (env0, n, s1)
+          in
+            m2
+          end
+
+  | M( itree(inode( ""
 
   | M(  itree(inode(x_root,_), children),_) = raise General.Fail("\n\nIn M root = " ^ x_root ^ "\n\n")
   
