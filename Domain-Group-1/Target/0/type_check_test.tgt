@@ -1,0 +1,29 @@
+bool y;
+
+y = false;
+y = true;
+y = y == y;
+y = y != y;
+
+
+int x1;
+int x2;
+
+x1 = 1;
+
+x2 = x1 + x1;
+x2 = x1 - x1;
+x2 = x1 * x1;
+x2 = x1 div x1;
+x2 = x1 mod x1;
+
+x2--;
+x2++;
+++x2;
+--x2;
+
+
+y = x1 < x2;
+y = x1 <= x2;
+y = x1 > x2;
+y = x1 >= x2;
