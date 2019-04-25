@@ -14,6 +14,7 @@ open CONCRETE_REPRESENTATION;
 
 exception model_error;
 
+
 fun typeOf( itree(inode("expr",_), [ logic_or ] ), m) = typeOf(logic_or, m)
 
   (* Logical Or *)
@@ -281,6 +282,14 @@ fun typeOf( itree(inode("expr",_), [ logic_or ] ), m) = typeOf(logic_or, m)
   (* Operations *)
   | typeOf( itree(inode("operations",_),
                 [
+                    operation
+                ]
+            ),
+        m
+    ) = typeOf(operation, m)
+
+  | typeOf( itree(inode("operations",_),
+                [
                     itree(inode("(",_), [] ),
                     expr,
                     itree(inode(")",_), [] )
@@ -319,97 +328,102 @@ fun typeOf( itree(inode("expr",_), [ logic_or ] ), m) = typeOf(logic_or, m)
           if t = BOOL then BOOL
           else ERROR
         end
-
-  | typeOf( itree(inode("operations",_),
+  
+  (* Identifier *)
+  | typeOf( itree(inode("identifier",_),
                 [
-                    identifier as itree(inode("identifier",_), [] )
+                    id_node
                 ]
             ),
         m
-    ) = getType(accessEnv(getLeaf(identifier), m))
-
-  (* Pre_post *)
-  | typeOf( itree(inode("pre_post",_),
-                [ 
-                    itree(inode("++",_), [] ),
-                    identifier
-                ]
-            ),
-        m
-    ) = let
-          val t = getType(accessEnv(getLeaf(identifier), m))
-        in
-          if t = INT then INT
-          else ERROR
-        end
-
-  | typeOf( itree(inode("pre_post",_),
-                [ 
-                    itree(inode("--",_), [] ),
-                    identifier
-                ]
-            ),
-        m
-    ) = let
-          val t = getType(accessEnv(getLeaf(identifier), m))
-        in
-          if t = INT then INT
-          else ERROR
-        end
-
-  | typeOf( itree(inode("pre_post",_),
-                [
-                    identifier,
-                    itree(inode("--",_), [] )
-                ]
-            ),
-        m
-    ) = let
-          val t = getType(accessEnv(getLeaf(identifier), m))
-        in
-          if t = INT then INT
-          else ERROR
-        end
-
-  | typeOf( itree(inode("pre_post",_),
-                [
-                    identifier,
-                    itree(inode("++",_), [] )
-                ]
-            ),
-        m
-    ) = let
-          val t = getType(accessEnv(getLeaf(identifier), m))
-        in
-          if t = INT then INT
-          else ERROR
-        end
+    ) = getType(accessEnv(getLeaf(id_node), m))
 
   (* Value *)
-  | typeOf( itree(inode("value",_),
-                [
-                    itree(inode("integer",_), [] )
-                ]
-            ),
-        m) = INT
-        
   | typeOf( itree(inode("value",_),
                 [
                     itree(inode("true",_), [] )
                 ]
             ),
-        m) = BOOL
+        m
+    ) = BOOL
         
   | typeOf( itree(inode("value",_),
                 [
                     itree(inode("false",_), [] )
                 ]
             ),
-        m) = BOOL
+        m
+    ) = BOOL
+
+  | typeOf( itree(inode("value",_),
+                [
+                    integer
+                ]
+            ),
+        m
+    ) = INT
+
+  (* Pre_post *)
+  | typeOf( itree(inode("pre_post",_), 
+                [ 
+                    itree(inode("++",_), [] ),
+                    id_node
+                ] 
+             ), 
+        m
+    ) = let
+          val t = getType(accessEnv(getLeaf(id_node), m))
+        in
+          if t = INT then INT
+          else ERROR
+        end
+
+  | typeOf(  itree(inode("pre_post",_), 
+                [ 
+                    itree(inode("--",_), [] ),
+                    id_node
+                ] 
+             ), 
+        m
+   ) = let
+          val t = getType(accessEnv(getLeaf(id_node), m))
+        in
+          if t = INT then INT
+          else ERROR
+        end
+
+  | typeOf(  itree(inode("pre_post",_), 
+                [ 
+                    id_node,
+                    itree(inode("++",_), [] )
+                ] 
+             ), 
+        m
+    ) = let
+          val t = getType(accessEnv(getLeaf(id_node), m))
+        in
+          if t = INT then INT
+          else ERROR
+        end
+
+  | typeOf( itree(inode("pre_post",_), 
+                [ 
+                    id_node,
+                    itree(inode("--",_), [] )
+                ] 
+             ), 
+        m
+    ) = let
+          val t = getType(accessEnv(getLeaf(id_node), m))
+        in
+          if t = INT then INT
+          else ERROR
+        end
   
   | typeOf( itree(inode(x_root,_), children),_) = raise General.Fail("\n\nIn typeOf root = " ^ x_root ^ "\n\n")
 
   | typeOf _ = raise Fail("Error in Model.typeOf - this should never occur")
+
 
 fun typeCheck( itree(inode("prog",_), [ stmt_list ] ), m) = typeCheck(stmt_list, m)
 
