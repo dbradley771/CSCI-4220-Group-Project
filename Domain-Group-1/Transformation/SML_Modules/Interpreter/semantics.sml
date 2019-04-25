@@ -543,7 +543,7 @@ fun E( itree(inode("expr",_),
           (v, m1)
         end
     
-  | E(  itree(inode(x_root,_), children),_) = raise General.Fail("\n\nIn M root = " ^ x_root ^ "\n\n")
+  | E(  itree(inode(x_root,_), children),_) = raise General.Fail("\n\nIn E root = " ^ x_root ^ "\n\n")
   
   | E _ = raise Fail("error in Semantics.E - this should never occur")
 
@@ -689,6 +689,12 @@ fun M(  itree(inode("prog",_),
         in
           m2
         end 
+
+  (* Print *)
+  
+  (* Conditional *)
+  
+  (* Loop *)
 
   | M(  itree(inode(x_root,_), children),_) = raise General.Fail("\n\nIn M root = " ^ x_root ^ "\n\n")
   
