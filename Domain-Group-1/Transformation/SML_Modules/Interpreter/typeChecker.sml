@@ -558,7 +558,139 @@ fun typeCheck( itree(inode("prog",_), [ stmt_list ] ), m) = typeCheck(stmt_list,
           if t1 = t2 andalso t1 <> ERROR then m
           else raise model_error
         end
+        
+  | typeCheck(itree(inode("print", _),
+                    [
+                        id_node,
+                        itree(inode("print",_), []),
+                        expr
+                    ]
+                ),
+                m0
+        ) = let
+                val t1 = typeOf( expr, m0 )
+            in
+                if t1 = ERROR then raise model_error
+                else m0
+            end
+
+  | typeCheck(itree(inode("conditional",_),
+                    [
+                        conditional
+                    ]
+                ),
+            m
+        ) = typeCheck(conditional, m)
   
+  | typeCheck(itree(inode("if", _),
+                    [
+                    id_node,
+                    itree(inode("if",_), [] ),
+                    expr
+                    itree(inode("then",_), []),
+                    block1
+                    ]
+                 ),
+              m
+           ) = let
+                  val t1 = typeOf( expr, m )
+                  val m1 = typeCheck( block1, m )
+               in
+                  if t1 = BOOL then m
+                  else raise model_error
+               end
+
+  | typeCheck(itree(inode("if-else", _),
+                  [
+                      id_node,
+                      itree(inode("if",_), [] ),
+                      expr
+                      itree(inode("then",_), []),
+                      block1
+                      itree(inode("else",_), []),
+                      block2
+                  ]
+               ),
+              m
+          ) = let
+                  val t1 = typeOf( expr, m )
+                  val m1 = typeCheck( block1, m )
+                  val m2 = typeCheck( block2, m )
+              in
+                 if t1 = BOOL then m
+                 else raise model_error
+              end
+  | typeCheck(itree(inode("block",_), 
+                [
+                    id_node,
+                    itree(inode("{",_), []),
+                    stmtList
+                    itree(inode("}",_), [])
+                ]
+            ),
+          m0
+      
+      ) = let
+            val m1 = typeCheck( stmtList, m0 )
+          in
+            m0
+          end
+   
+   | typeCheck(itree(inode("loop",_),
+                    [
+                    loop
+                    ]
+            ),
+          m
+        ) = typeCheck(loop, m)
+        
+   | typeCheck (itree(inode("for_loop",_),
+                [
+                  itree(inode("for",_), [] ),
+                  itree(inode("(",_), [] ),
+                  assignment1,
+                  itree(inode(";",_), [] ),
+                  expr,
+                  itree(inode(";",_), [] ),
+                  assignment2,
+                  itree(inode(")",_), [] ),
+                  block
+                ]
+            ),
+         m0
+        ) = let
+                val m1 = typeCheck( assignment1, m0 )
+                val t1 = typeOf( expr, m1 )
+                val m2 = typeCheck( block, m1 )
+                val m3 = typeCheck( assignment2, m2 )
+            in
+                if t1 = BOOL then m0
+                else raise model_error
+            end
+            
+  | typeCheck(itree(inode("while_loop",_),
+                [
+                    itree(inode("while",_), [] ),
+                    itree(inode("(",_), [] ),
+                    expr,
+                    itree(inode(")",_), [] ),
+                    block
+                ]
+            ),
+        m0
+     ) = let
+            val t1     = typeOf( expr, m0 )
+            val m1     = typeCheck( block, m0 )
+        in
+            if t1 = BOOL then m0
+        else raise model_error
+        
+        end
+
+
+            
+            
+
   | typeCheck( itree(inode(x_root,_), children),_) = raise General.Fail("\n\nIn typeCheck root = " ^ x_root ^ "\n\n")
   
   | typeCheck _ = raise Fail("Error in Model.typeCheck - this should never occur")
