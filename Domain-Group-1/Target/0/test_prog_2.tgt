@@ -1,5 +1,0 @@
-while (if (1 < 2) then true else false) {
-    while (b < a) {
-        b++;
-    };
-};
