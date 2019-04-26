@@ -558,12 +558,14 @@ fun typeCheck( itree(inode("prog",_), [ stmt_list ] ), m) = typeCheck(stmt_list,
           if t1 = t2 andalso t1 <> ERROR then m
           else raise model_error
         end
-        
-  | typeCheck(itree(inode("print", _),
+   
+  (* print *) 
+  | typeCheck(itree(inode("print_stmt", _),
                     [
-                        id_node,
                         itree(inode("print",_), []),
-                        expr
+                        itree(inode("(",_), [] ),
+                        expr,
+                        itree(inode(")",_), [] )
                     ]
                 ),
                 m0
@@ -573,7 +575,8 @@ fun typeCheck( itree(inode("prog",_), [ stmt_list ] ), m) = typeCheck(stmt_list,
                 if t1 = ERROR then raise model_error
                 else m0
             end
-
+            
+  (* conditional *)
   | typeCheck(itree(inode("conditional",_),
                     [
                         conditional
@@ -582,11 +585,13 @@ fun typeCheck( itree(inode("prog",_), [ stmt_list ] ), m) = typeCheck(stmt_list,
             m
         ) = typeCheck(conditional, m)
   
-  | typeCheck(itree(inode("if", _),
+  (* if *)
+  | typeCheck(itree(inode("if_stmt", _),
                     [
-                    id_node,
                     itree(inode("if",_), [] ),
-                    expr
+                    itree(inode("(",_), [] ),
+                    expr,
+                    itree(inode(")",_), [] ),
                     itree(inode("then",_), []),
                     block1
                     ]
@@ -599,14 +604,16 @@ fun typeCheck( itree(inode("prog",_), [ stmt_list ] ), m) = typeCheck(stmt_list,
                   if t1 = BOOL then m
                   else raise model_error
                end
-
-  | typeCheck(itree(inode("if-else", _),
+               
+  (* if else *)
+  | typeCheck(itree(inode("if_else", _),
                   [
-                      id_node,
                       itree(inode("if",_), [] ),
-                      expr
+                      itree(inode("(",_), [] ),
+                      expr,
+                      itree(inode(")",_), [] ),
                       itree(inode("then",_), []),
-                      block1
+                      block1,
                       itree(inode("else",_), []),
                       block2
                   ]
@@ -620,16 +627,15 @@ fun typeCheck( itree(inode("prog",_), [ stmt_list ] ), m) = typeCheck(stmt_list,
                  if t1 = BOOL then m
                  else raise model_error
               end
+  (* Block *)            
   | typeCheck(itree(inode("block",_), 
                 [
-                    id_node,
                     itree(inode("{",_), []),
-                    stmtList
+                    stmtList,
                     itree(inode("}",_), [])
                 ]
             ),
           m0
-      
       ) = let
             val m1 = typeCheck( stmtList, m0 )
           in
@@ -638,7 +644,7 @@ fun typeCheck( itree(inode("prog",_), [ stmt_list ] ), m) = typeCheck(stmt_list,
    
    | typeCheck(itree(inode("loop",_),
                     [
-                    loop
+                        loop
                     ]
             ),
           m

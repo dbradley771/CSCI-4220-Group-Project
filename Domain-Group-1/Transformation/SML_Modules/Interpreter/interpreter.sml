@@ -35,9 +35,9 @@ fun execute [ programTree ] =
         (* you may want to output the final model in order to validate that there are no memory leaks in your code *)
                 
         print("\n\n\n");
-        print(" ======================================= \n");
+        print("======================================= \n");
         Model.showProgState(result);
-        print("\n ======================================= \n");
+        print("======================================= \n");
         print("\n\n\n") 
     end
   | execute _ = raise Fail("Error in Interpreter.execute - this should never occur")

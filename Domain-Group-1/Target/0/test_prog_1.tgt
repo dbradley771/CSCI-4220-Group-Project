@@ -1,0 +1,18 @@
+int a = 1;
+
+int b = 2;
+
+int c = a + b;
+
+int d = c - a;
+
+int e = 1 * 2 * 3;
+
+int f = 10 mod b;
+
+a = 0;
+
+while (a < b) {
+    c ++;
+    a++;
+};
